@@ -14,7 +14,7 @@ pip install -r requirements.txt
 
 ## Para poblar el dataset 
 ```sh
-python3 scripts/videoreader.py --name alejandro
+python3 scripts/datapopulator.py --name alejandro
 ```
 
 ## Guardar dependencias
