@@ -2,6 +2,7 @@ import argparse
 import cv2
 import os
 from pathlib import Path
+import random
 
 def main():
   argument_parser = argparse.ArgumentParser()
@@ -13,14 +14,19 @@ def main():
   args = argument_parser.parse_args()
 
   if args.name == None:
+    print("No --name arg provided")
     exit()
 
   root_dir = Path(__file__).resolve().parent.parent
 
   output_folder = os.path.join(root_dir, "dataset", "train", args.name)
+  output_folder_val = os.path.join(root_dir, "dataset", "val", args.name)
 
   if not os.path.exists(output_folder):
     os.makedirs(output_folder)
+
+  if not os.path.exists(output_folder_val):
+    os.makedirs(output_folder_val)
 
   cap = cv2.VideoCapture(0)
 
@@ -41,7 +47,11 @@ def main():
 
     key = cv2.waitKey(1) & 0xFF
     if key == ord('s'):
-      image_filename = os.path.join(output_folder, f"image_{frame_count:04d}.jpg")
+      if random.random() > 0.15:
+        image_filename = os.path.join(output_folder, f"image_{frame_count:04d}.jpg")
+      else:
+        image_filename = os.path.join(output_folder_val, f"image_{frame_count:04d}.jpg")
+
       cv2.imwrite(image_filename, frame)
       print(f"Image saved: {image_filename}")
       frame_count += 1
