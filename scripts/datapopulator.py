@@ -17,7 +17,7 @@ def main():
 
   root_dir = Path(__file__).resolve().parent.parent
 
-  output_folder = f"{root_dir}/dataset/{args.name}"
+  output_folder = os.path.join(root_dir, "dataset", "train", args.name)
 
   if not os.path.exists(output_folder):
     os.makedirs(output_folder)
