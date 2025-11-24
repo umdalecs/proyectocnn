@@ -1,5 +1,6 @@
 from pathlib import Path
-import os 
+import os
+import json
 import tensorflow as tf
 from tensorflow.keras import layers, models, optimizers, callbacks
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -10,6 +11,15 @@ def main():
   TRAIN_DATA_DIR = os.path.join(root_dir, "dataset", "train")
   VAL_DATA_DIR = os.path.join(root_dir, "dataset", "val")
   MODEL_PATH = os.path.join(root_dir, "model","face_classifier.h5")
+  TAGS_PATH = os.path.join(root_dir, "model","tags.json")
+
+  # Guarda las etiquetas para utilizarlas después
+  if not os.path.exists(Path(TAGS_PATH).parent):
+    os.makedirs(TAGS_PATH)
+
+  tags = os.listdir(TRAIN_DATA_DIR)
+  with open(TAGS_PATH, "w") as f:
+    json.dump(tags, f)
 
   IMG_SIZE = (224, 224)
   BATCH = 32

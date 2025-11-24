@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import json
 import cv2
 import numpy as np
 import tensorflow as tf
@@ -8,7 +9,7 @@ from tensorflow.keras.models import load_model
 root_dir = Path(__file__).resolve().parent.parent
 
 MODEL_PATH = os.path.join(root_dir, "model","face_classifier.h5")
-TAGS_PATH = os.path.join(root_dir, "dataset","train")
+TAGS_PATH = os.path.join(root_dir, "model","tags.json")
 
 # 1. --- Configuración del Modelo de Clasificación (Keras .h5) ---
 try:
@@ -19,11 +20,14 @@ except Exception as e:
     print(f"Error al cargar el modelo .h5: {e}")
     # Si no puedes cargar el modelo, el programa no podrá clasificar
     classifier_model = None 
+    exit()
 
 # Lista de nombres/etiquetas
-# ¡IMPORTANTE! Asegúrate de que este orden coincida EXACTAMENTE con el orden 
-# de las clases que usaste para entrenar tu modelo.
-CLASS_NAMES = os.listdir(TAGS_PATH)
+CLASS_NAMES = None
+
+with open(TAGS_PATH, "r")  as f:
+    CLASS_NAMES = json.load(f)
+    
 IMG_SIZE = (224, 224) # Reemplaza con el tamaño de entrada de tu modelo
 
 # 2. --- Configuración del Detector de Caras (OpenCV Haar Cascade) ---
@@ -99,17 +103,17 @@ def main():
             else:
                 label_text = "Modelo No Cargado"
             
-        # 5. Dibujar la Etiqueta sobre el Recuadro
-        # La posición es un poco encima del recuadro
-        cv2.putText(
-            video_frame, 
-            label_text, 
-            (x, y - 10), # Posición (x, y) - 10 para estar un poco más alto
-            cv2.FONT_HERSHEY_SIMPLEX, 
-            0.9, # Tamaño de la fuente
-            (0, 255, 0), # Color (verde)
-            2 # Grosor
-        )
+            # 5. Dibujar la Etiqueta sobre el Recuadro
+            # La posición es un poco encima del recuadro
+            cv2.putText(
+                video_frame, 
+                label_text, 
+                (x, y - 10), # Posición (x, y) - 10 para estar un poco más alto
+                cv2.FONT_HERSHEY_SIMPLEX, 
+                0.9, # Tamaño de la fuente
+                (0, 255, 0), # Color (verde)
+                2 # Grosor
+            )
 
         cv2.imshow(
             "Reconocimiento Facial con Keras", video_frame
