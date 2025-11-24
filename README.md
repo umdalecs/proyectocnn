@@ -14,7 +14,12 @@ pip install -r requirements.txt
 
 ## Para poblar el dataset 
 ```sh
-python3 scripts/datapopulator.py --name "alejandro flores"
+python3 src/datapopulator.py --name "alejandro flores"
+```
+
+## Entrenar el modelo
+```sh
+python3 src/train.py
 ```
 
 ## Guardar dependencias
