@@ -15,7 +15,7 @@ def main():
 
   # Guarda las etiquetas para utilizarlas después
   if not os.path.exists(Path(TAGS_PATH).parent):
-    os.makedirs(TAGS_PATH)
+    os.makedirs(Path(TAGS_PATH).parent.resolve())
 
   tags = os.listdir(TRAIN_DATA_DIR)
   with open(TAGS_PATH, "w") as f:
