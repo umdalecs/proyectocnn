@@ -4,7 +4,24 @@ import os
 from pathlib import Path
 import random
 
+def recortar_cuadrada(img):
+    # Obtener las dimensiones de la imagen
+    alto, ancho, canales = img.shape
+
+    # Determinar el tamaño del lado cuadrado
+    nuevo_tamano = min(alto, ancho)
+
+    # Calcular el centro de la imagen
+    x_inicio = (ancho - nuevo_tamano) // 2
+    y_inicio = (alto - nuevo_tamano) // 2
+
+    # Recortar la imagen para que sea cuadrada
+    img_cuadrada = img[y_inicio:y_inicio+nuevo_tamano, x_inicio:x_inicio+nuevo_tamano]
+
+    return img_cuadrada
+
 def main():
+  flag = False
   argument_parser = argparse.ArgumentParser()
 
   argument_parser.add_argument(
@@ -19,11 +36,11 @@ def main():
 
   root_dir = Path(__file__).resolve().parent.parent
 
-  output_folder = os.path.join(root_dir, "dataset", "train", args.name)
+  output_folder_train = os.path.join(root_dir, "dataset", "train", args.name)
   output_folder_val = os.path.join(root_dir, "dataset", "val", args.name)
 
-  if not os.path.exists(output_folder):
-    os.makedirs(output_folder)
+  if not os.path.exists(output_folder_train):
+    os.makedirs(output_folder_train)
 
   if not os.path.exists(output_folder_val):
     os.makedirs(output_folder_val)
@@ -47,12 +64,17 @@ def main():
 
     key = cv2.waitKey(1) & 0xFF
     if key == ord('s'):
-      if random.random() > 0.15:
-        image_filename = os.path.join(output_folder, f"image_{frame_count:04d}.jpg")
+      flag = not flag
+      
+    if flag:
+      frame_cuadrada = recortar_cuadrada(frame)
+      
+      if random.random() > 0.2:
+        image_filename = os.path.join(output_folder_train, f"image_{frame_count:04d}.png")
       else:
-        image_filename = os.path.join(output_folder_val, f"image_{frame_count:04d}.jpg")
+        image_filename = os.path.join(output_folder_val, f"image_{frame_count:04d}.png")
 
-      cv2.imwrite(image_filename, frame)
+      cv2.imwrite(image_filename, frame_cuadrada)
       print(f"Image saved: {image_filename}")
       frame_count += 1
 

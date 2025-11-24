@@ -23,7 +23,7 @@ def main():
 
   IMG_SIZE = (224, 224)
   BATCH = 32
-  NUM_CLASSES = 5  # ajuste según dataset
+  NUM_CLASSES = len(tags)
 
   # Generators con augmentation ligero en entrenamiento
   train_datagen = ImageDataGenerator(
@@ -74,7 +74,6 @@ def main():
 
   model.fit(train_gen, validation_data=val_gen, epochs=20, callbacks=[es, rlr])
 
-  # Guardar
   model.save(MODEL_PATH)
 
 if __name__ == "__main__":
