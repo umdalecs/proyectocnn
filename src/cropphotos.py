@@ -38,6 +38,8 @@ def create_face_dataset(input_dir):
                 face_crop = img[y : y + h, x : x + w]
 
                 cv2.imwrite(image_path, face_crop)
+            else:
+              os.remove(image_path)
 
 
 create_face_dataset(DATASET_DIR)

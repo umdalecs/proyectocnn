@@ -2,7 +2,6 @@
 .venv
 
 # Large space data
-dataset/
-dataset.zip
+dataset*
 
 model
